@@ -4,31 +4,118 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
-    <title>Mad Libs</title>
     <link href="style.css" rel="stylesheet" type="text/css" />
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet"> 
+    <title>Mad Libs</title>
   </head>
 
   <body>
 
-    <audio id="audio" src="music.mp3" loop="loop"></audio>
-
+    <audio id="audio" src="./music.mp3" loop="loop"></audio>
 
     <div class="wrapper">
-
       <header>
         <h1>Baile Flamenco</h1>
       </header>
-
       <div class="container">
         <div class="madLibsEdit"></div>
         <div class="madLibsPreview"></div>
       </div>
-  
     </div>
+    <script>
+      const rawStory = "Flamenco, form of song[n], dance, and instrumental mostly[a] guitar music commonly associated with the Andalusian Roma of southern[a] Spain. The roots[n] of flamenco, though somewhat mysterious, seem to lie in the Roma migration from Rajasthan to Spain between the 9th and 14th centuries. These migrants brought with them musical instruments, such as tambourines, bells, and wooden castanets[n], and an extensive[a] repertoire of songs and dances. In Spain[m] they encountered the rich cultures of the Sephardic Jews and the Moors. Their centuries-long cultural intermingling produced[v] the unique art form known as flamenco.";
 
-    <script src="do-not-touch.js" type=“text/javascript”></script>
-    <script src="madlibs.js" type=“text/javascript”></script>
+      // Music code
+
+      // window.addEventListener("load", function () {
+      //   const audio = document.getElementById("audio");
+      //   audio.volume = 0.5;
+      //   audio.play();
+      //   console.log("Tiempo de Bailar!")
+      // })
+
+      let newArr = [];
+
+      function parseStory(rawStory) {
+        const regex = /(?:^|\W)[v|a|m|n|](?:$|\W)/g;
+        const regex2 = /[.,\/]/;
+
+        const array = rawStory.split(" ");
+        array.forEach((element) => {
+          if (regex.test(element)) {
+            const matchRegex = element.match(regex);
+            if (matchRegex[0] === "[n]") {
+              element = element.replace(regex, "");
+              newArr.push({ word: element, pos: "noun" });
+            }
+            else if (matchRegex[0] === "[v]") {
+              element = element.replace(regex, "");
+              newArr.push({ word: element, pos: "verb" });
+            }
+            else if (matchRegex[0] === "[a]") {
+              element = element.replace(regex, "");
+              newArr.push({ word: element, pos: "adjective" });
+            }
+            else if (matchRegex[0] === "[m]") {
+              element = element.replace(regex, "");
+              newArr.push({ word: element, pos: "name" });
+            }
+          }
+          else if (!regex.test(element)) {
+            newArr.push({ word: element });
+          }
+          else if (element.match(regex2)) {
+            let matchReg = element.match(regex2)[0];
+            element = element.replace(regex2, "");
+            newArr.push({ word: matchReg });
+          }
+        });
+      }
+
+      function showStory(processedStory) {
+        let madLibsEdit = document.querySelector(".madLibsEdit");
+        let madLibsPreview = document.querySelector(".madLibsPreview");
+
+        newArr.forEach(function (element) {
+          if (!element.pos) {
+            let editSpan = document.createElement("span");
+            editSpan.innerHTML = element.word + "&nbsp";
+            madLibsEdit.appendChild(editSpan);
+            let prevSpan = document.createElement("span");
+            prevSpan.innerHTML = element.word + "&nbsp";
+            madLibsPreview.appendChild(prevSpan);
+          } else {
+            let inputPlace = document.createElement("input");
+            inputPlace.setAttribute("class", element.pos);
+            inputPlace.setAttribute("type", "text");
+            inputPlace.setAttribute("maxlength", "20");
+            inputPlace.setAttribute("placeholder", `${element.pos} `);
+
+            let inputValPreview = document.createElement("span");
+            let x = document.createTextNode(`(${element.pos}) `);
+            inputValPreview.appendChild(x);
+            inputValPreview.setAttribute("class", "input-value");
+            inputValPreview.style.color = "red";
+
+            inputPlace.addEventListener("input", function () {
+              if (inputPlace.value) {
+                inputValPreview.style.color = "red";
+                inputValPreview.setAttribute("class", "input-prev");
+                inputValPreview.innerHTML = `${inputPlace.value} &nbsp`;
+  
+              } else {
+                inputValPreview.innerText = `(${inputPlace.placeholder})`;
+              }
+            });
+            madLibsEdit.appendChild(inputPlace);
+            madLibsPreview.appendChild(inputValPreview);
+          }
+        });
+      }
+      
+      parseStory(rawStory);
+      showStory();
+    </script>
   </body>
 </html>
