@@ -1,6 +1,6 @@
-# Re:Coded Mad Libz
+# Re:Coded Madlibs
 
-## What is Mad Libs? 
+## What is Madlibs? 
 See [wikipedia](https://en.wikipedia.org/wiki/Mad_Libs). Yes, I know this section is short, do not skip this, **please read what Mad Libs is or the rest of this will make no sense**. In normal mad libs, you usually just insert the word, but in this version, it's more like a "fill in the blank" of an existing story.
 
 ## Instructions
