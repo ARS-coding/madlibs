@@ -78,7 +78,15 @@ header h1 {
 
 .madLibsPreview input[type="text"]:focus {
   outline: none;
-  border: none; /*değiştirebiliriz*/
+  border: none;
+}
+
+#speaker-icon-div {
+  position: absolute;
+  top: 40px;
+  right: 40px;
+  width: 35px;
+  height: 35px;
 }
 
 @media (min-width: 1450px) {
